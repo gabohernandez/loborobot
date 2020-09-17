@@ -3,18 +3,17 @@ package laboratorio.strategies.impl;
 import laboratorio.LoboRobot;
 import laboratorio.strategies.Strategy;
 
-public class MiddleStrategy implements Strategy{
+public class MiddleStrategy extends ParentStrategy implements Strategy {
 
-	private LoboRobot robot;
 	double moveAmount; // How much to move
 	boolean peek; // Don't turn if there's a robot there
 
 	public MiddleStrategy(LoboRobot robot) {
-		this.robot = robot;
+		super(robot);
 	}
 
 	@Override
-	public void run() {
+	public void nextStep() {
 
 		// Initialize moveAmount to the maximum possible for this battlefield.
 		moveAmount = Math.max(getBattleFieldWidth(), getBattleFieldHeight());

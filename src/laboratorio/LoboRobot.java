@@ -1,62 +1,56 @@
 package laboratorio;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import laboratorio.strategies.Strategy;
+import laboratorio.strategies.StrategyEnum;
 import laboratorio.strategies.impl.LowStrategy;
 import laboratorio.strategies.impl.MiddleStrategy;
 import laboratorio.strategies.impl.StolenStrategy;
-import robocode.*;
+import robocode.JuniorRobot;
 
 // API help : http://robocode.sourceforge.net/docs/robocode/robocode/JuniorRobot.html
 
-/* 
- * Lo que esta implementado aca me lo robe de https://robowiki.net/wiki/User_talk:Realmoonstruck
- * 
- */
 public class LoboRobot extends JuniorRobot {
 
-	// Aca vamos a guardar las estrategias (clases que implementen "Strategy")
-	// Cuando nos pegan y cuando disparamos, perdemos energia. Creo que esos serian
-	// los momentos donde deberiamos cambiar de estrategia.
-	// O podriaamos tener estrategias para buscar enemigos o para huir
-	private ArrayList<Strategy> strategies = new ArrayList<Strategy>();
-	private int currentPositionStrategy = 0;
+	private Map<StrategyEnum, Strategy> strategies = new HashMap();
+	private StrategyEnum currentStrategy;
 
 	public LoboRobot() {
-		StolenStrategy stolenStrategy = new StolenStrategy(this);
-		this.strategies.add(stolenStrategy);
-		MiddleStrategy middleStrategy = new MiddleStrategy(this);
-		this.strategies.add(middleStrategy);
-		LowStrategy lowStrategy = new LowStrategy(this);
-		this.strategies.add(lowStrategy);
-		System.out.println(strategies);
+		this.strategies.put(StrategyEnum.STOLEN_STRATEGY, new StolenStrategy(this));
+		this.strategies.put(StrategyEnum.MIDDLE_STRATEGY, new MiddleStrategy(this));
+		this.strategies.put(StrategyEnum.LOW_STRATEGY, new LowStrategy(this));
+		this.currentStrategy = StrategyEnum.STOLEN_STRATEGY;
 	}
-	
-		
-	public ArrayList<Strategy> getStrategies() {
+
+	public Map<StrategyEnum, Strategy> getStrategies() {
 		return strategies;
 	}
 
-
-	public void setStrategies(ArrayList<Strategy> strategies) {
-		this.strategies = strategies;
+	public StrategyEnum getCurrentStrategy() {
+		return currentStrategy;
 	}
 
-
-	public int getCurrentPositionStrategy() {
-		return currentPositionStrategy;
+	public void setCurrentStrategy(StrategyEnum currentStrategy) {
+		this.currentStrategy = currentStrategy;
 	}
 
-
-	public void setCurrentPositionStrategy(int currentPositionStrategy) {
-		this.currentPositionStrategy = currentPositionStrategy;
-	}
-
-
+	/**
+	 * 
+	 */
 	@Override
 	public void run() {
 		setColors(white, blue, white, blue, white);
-		this.getCurrentStrategy().run();
+		while (true) {
+			// Si tenemos que hacer algo antes de los próximos pasos podemos meter un first
+			// step. Algo así:
+			// this.getStrategy().firstSteap();
+			// Cada estrategía debería ejecutar esos pasos una única vez, por ende
+			// tendriamos un booleano en false y cuando se ejecuta por primera vez pasa a
+			// true
+			this.getStrategy().nextStep();
+		}
 	}
 
 	/**
@@ -64,37 +58,36 @@ public class LoboRobot extends JuniorRobot {
 	 */
 	@Override
 	public void onScannedRobot() {
-		this.getCurrentStrategy().onScannedRobot();
+		this.getStrategy().onScannedRobot();
 	}
 
 	/**
 	 * onHitWall: What to do when you hit a wall
 	 */
 	public void onHitWall() {
-		this.getCurrentStrategy().onHitWall();
+		this.getStrategy().onHitWall();
 	}
 
 	/**
 	 * onHitByBullet: What to do when you're hit by a bullet
 	 */
 	public void onHitByBullet() {
-		this.getCurrentStrategy().onHitByBullet();
+		this.getStrategy().onHitByBullet();
 	}
 
 	/**
 	 * onHitRobot: What to do when you're hit by a robot
 	 */
 	public void onHitRobot() {
-		this.getCurrentStrategy().onHitRobot();
+		this.getStrategy().onHitRobot();
 	}
 
 	/**
 	 * 
-	 * @return la estrategia actual según la posición en el arreglo. Podríamos
-	 *         hacerlo de otra manera
+	 * @return la estrategia actual
 	 */
-	private Strategy getCurrentStrategy() {
-		return this.strategies.get(this.getCurrentPositionStrategy());
+	private Strategy getStrategy() {
+		return this.strategies.get(this.getCurrentStrategy());
 	}
 
 }

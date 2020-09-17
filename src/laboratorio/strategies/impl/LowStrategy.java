@@ -3,18 +3,16 @@ package laboratorio.strategies.impl;
 import laboratorio.LoboRobot;
 import laboratorio.strategies.Strategy;
 
-public class LowStrategy implements Strategy{
+public class LowStrategy extends ParentStrategy implements Strategy {
 
-	private LoboRobot robot;
 	int turnCounter;
 
 	public LowStrategy(LoboRobot robot) {
-		this.robot = robot;
+		super(robot);
 	}
 
 	@Override
-	public void run() {
-
+	public void nextStep() {
 		turnCounter = 0;
 		setGunRotationRate(15);
 		while (true) {
@@ -65,4 +63,5 @@ public class LowStrategy implements Strategy{
 		else
 			this.robot.ahead(100);
 	}
+
 }

@@ -3,45 +3,25 @@ package laboratorio.strategies.impl;
 import laboratorio.LoboRobot;
 import laboratorio.strategies.Strategy;
 
-public class StolenStrategy implements Strategy {
+/**
+ * Lo que esta implementado aca me lo robe de
+ * https://robowiki.net/wiki/User_talk:Realmoonstruck
+ */
 
-	private LoboRobot robot;
+public class StolenStrategy extends ParentStrategy implements Strategy {
+
 	boolean peek; // Don't turn if there's a robot there
-	double moveAmount; // How much to move
+	int moveAmount = 100; // How much to move
 
 	public StolenStrategy(LoboRobot robot) {
-		this.robot = robot;
+		super(robot);
 	}
 
-	@Override	
-	public void run() {
-
-		// Loop forever
-		while (true) {
-			// Tell the game we will want to move ahead 40000 -- some large number
-			setAhead(1000);
-			movingForward = true;
-			// Tell the game we will want to turn right 90
-			setTurnRight(90);
-			// At this point, we have indicated to the game that *when we do something*,
-			// we will want to move ahead and turn right.  That's what "set" means.
-			// It is important to realize we have not done anything yet!
-			// In order to actually move, we'll want to call a method that
-			// takes real time, such as waitFor.
-			// waitFor actually starts the action -- we start moving and turning.
-			// It will not return until we have finished turning.
-			waitFor(new TurnCompleteCondition(this));
-			// Note:  We are still moving ahead now, but the turn is complete.
-			// Now we'll turn the other way...
-			setTurnLeft(180);
-			// ... and wait for the turn to finish ...
-			waitFor(new TurnCompleteCondition(this));
-			// ... then the other way ...
-			setTurnRight(180);
-			// .. and wait for that turn to finish.
-			waitFor(new TurnCompleteCondition(this));
-			// then back to the top to do it all again
-		}	
+	public void nextStep() {
+		// Gira el arma 90 grados relativo al cuerpo del robot
+		robot.bearGunTo(90);
+		// Se mueve hacia adelante
+		robot.ahead(moveAmount);
 	}
 
 	@Override
@@ -49,7 +29,7 @@ public class StolenStrategy implements Strategy {
 		// Esta cuenta la hace para saber cuan cerca está del otro robot.
 		// Cuanto más cerca, dispara con más fuerza
 		// Hay que entender bien cada cosa
-		double firepower = 3d - 2d * ((double) robot.scannedDistance / (double) this.robot.moveAmount);
+		double firepower = 3d - 2d * ((double) robot.scannedDistance / (double) this.moveAmount);
 		double bulletVelocity = 20 - 3 * firepower;
 		double offset = Math.toDegrees(Math.asin(this.robot.scannedVelocity
 		        * Math.sin(Math.toRadians(this.robot.scannedHeading - this.robot.scannedAngle)) / bulletVelocity));
@@ -78,7 +58,6 @@ public class StolenStrategy implements Strategy {
 		// Si le pega a la pared gira el cuerpo y el arma 90 grados
 		this.robot.bearGunTo(90);
 		this.robot.turnRight(90);
-
 	}
 
 	@Override

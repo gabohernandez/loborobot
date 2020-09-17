@@ -5,8 +5,8 @@ package laboratorio.strategies;
  */
 public interface Strategy {
 
-	public void run();
-
+	public void nextStep();
+	
 	public void onScannedRobot();
 
 	public void onHitByBullet();
