@@ -23,20 +23,7 @@ public class LoboRobot extends JuniorRobot {
 
 	@Override
 	public void run() {
-		// Las siguientes dos líneas las ejecuta una única vez por pelea
-		// Esto decide cuanto se va a mover el robot adaptado a cada campo de batalla
-		moveAmount = Math.max(fieldWidth, fieldHeight);
-		// Gira el robot 0 grados para que mire para arriba
-		turnTo(0);
-
-		// Eternamente
-		while (true) {
-			// Gira el arma 90 grados relativo al cuerpo del robot
-			bearGunTo(90);
-			// Se mueve hacia adelante
-			ahead(moveAmount);
-		}
-
+		this.getCurrentStrategy().run();
 	}
 
 	/**
