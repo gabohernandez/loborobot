@@ -14,20 +14,21 @@ public class LowStrategy extends ParentStrategy implements Strategy {
 	@Override
 	public void nextStep() {
 		turnCounter = 0;
-		setGunRotationRate(15);
+		this.robot.bearGunTo(15);
+//		setGunRotationRate(15);
 		while (true) {
 			if (turnCounter % 64 == 0) {
 				// Straighten out, if we were hit by a bullet and are turning
-				setTurnRate(0);
-				// Go forward with a velocity of 4
-				setVelocityRate(4);
+				this.robot.turnTo(0);
+//				setTurnRate(0);
 			}
 			if (turnCounter % 64 == 32) {
 				// Go backwards, faster
-				setVelocityRate(-6);
+//				setVelocityRate(-6);
 			}
 			turnCounter++;
-			execute();
+			this.robot.run();
+			//execute();
 		}
 	}
 
@@ -39,18 +40,14 @@ public class LowStrategy extends ParentStrategy implements Strategy {
 	@Override
 	public void onHitByBullet() {
 		// Turn to confuse the other robot
-		setTurnRate(5);
+		this.robot.turnTo(5);
 	}
 
 	@Override
 	public void onHitWall() {
-		if (movingForward) {
-			setBack(500);
-			movingForward = false;
-		} else {
-			setAhead(500);
-			movingForward = true;
-		}
+		// Si le pega a la pared gira el cuerpo y el arma 90 grados
+		this.robot.bearGunTo(90);
+		this.robot.turnRight(90);
 	}
 
 	@Override

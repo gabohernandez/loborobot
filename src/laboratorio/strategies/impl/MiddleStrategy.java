@@ -5,7 +5,7 @@ import laboratorio.strategies.Strategy;
 
 public class MiddleStrategy extends ParentStrategy implements Strategy {
 
-	double moveAmount; // How much to move
+	int moveAmount; // How much to move
 	boolean peek; // Don't turn if there's a robot there
 
 	public MiddleStrategy(LoboRobot robot) {
@@ -16,28 +16,27 @@ public class MiddleStrategy extends ParentStrategy implements Strategy {
 	public void nextStep() {
 
 		// Initialize moveAmount to the maximum possible for this battlefield.
-		moveAmount = Math.max(getBattleFieldWidth(), getBattleFieldHeight());
 		// Initialize peek to false
 		peek = false;
 
 		// turnLeft to face a wall.
 		// getHeading() % 90 means the remainder of
 		// getHeading() divided by 90.
-		turnLeft(getHeading() % 90);
-		ahead(moveAmount);
+		this.robot.turnLeft(45);
+		this.robot.ahead(moveAmount);
 		// Turn the gun to turn right 90 degrees.
 		peek = true;
-		turnGunRight(90);
-		turnRight(90);
+		this.robot.turnGunRight(90);
+		this.robot.turnRight(90);
 		while (true) {
 			// Look before we turn when ahead() completes.
 			peek = true;
 			// Move up the wall
-			ahead(moveAmount);
+			this.robot.ahead(moveAmount);
 			// Don't look now
 			peek = false;
 			// Turn to the next wall
-			turnRight(90);
+			this.robot.turnRight(90);
 		}
 	}
 
@@ -46,7 +45,7 @@ public class MiddleStrategy extends ParentStrategy implements Strategy {
 		// Esta cuenta la hace para saber cuan cerca está del otro robot.
 		// Cuanto más cerca, dispara con más fuerza
 		// Hay que entender bien cada cosa
-		double firepower = 2d - d * ((double) robot.scannedDistance / (double) this.robot.moveAmount);
+		double firepower = 5;
 		double bulletVelocity = 20 - 3 * firepower;
 		double offset = Math.toDegrees(Math.asin(this.robot.scannedVelocity
 		        * Math.sin(Math.toRadians(this.robot.scannedHeading - this.robot.scannedAngle)) / bulletVelocity));
@@ -68,13 +67,9 @@ public class MiddleStrategy extends ParentStrategy implements Strategy {
 
 	@Override
 	public void onHitWall() {
-		if (movingForward) {
-			setBack(1000);
-			movingForward = false;
-		} else {
-			setAhead(1000);
-			movingForward = true;
-		}
+		// Si le pega a la pared gira el cuerpo y el arma 90 grados
+		this.robot.bearGunTo(90);
+		this.robot.turnRight(90);
 	}
 
 	@Override
