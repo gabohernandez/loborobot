@@ -15,7 +15,6 @@ public class StolenStrategy implements Strategy {
 
 	@Override	
 	public void run() {
-		setColors(white, blue, white, blue, white);
 
 		// Loop forever
 		while (true) {

@@ -3,9 +3,10 @@ package laboratorio.strategies.impl;
 import laboratorio.LoboRobot;
 import laboratorio.strategies.Strategy;
 
-public class LowStrategy implements Strategy {
+public class LowStrategy implements Strategy{
 
 	private LoboRobot robot;
+	int turnCounter;
 
 	public LowStrategy(LoboRobot robot) {
 		this.robot = robot;
@@ -13,7 +14,7 @@ public class LowStrategy implements Strategy {
 
 	@Override
 	public void run() {
-		setColors(white, blue, white, blue, white);
+
 		turnCounter = 0;
 		setGunRotationRate(15);
 		while (true) {

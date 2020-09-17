@@ -1,28 +1,61 @@
 package laboratorio;
 
+import java.util.ArrayList;
 import laboratorio.strategies.Strategy;
+import laboratorio.strategies.impl.LowStrategy;
+import laboratorio.strategies.impl.MiddleStrategy;
 import laboratorio.strategies.impl.StolenStrategy;
 import robocode.*;
 
 // API help : http://robocode.sourceforge.net/docs/robocode/robocode/JuniorRobot.html
 
 /* 
- * Lo que está implementado acá me lo robé de https://robowiki.net/wiki/User_talk:Realmoonstruck
+ * Lo que esta implementado aca me lo robe de https://robowiki.net/wiki/User_talk:Realmoonstruck
  * 
  */
 public class LoboRobot extends JuniorRobot {
 
 	// Aca vamos a guardar las estrategias (clases que implementen "Strategy")
-	// Cuando nos pegan y cuando disparamos, perdemos energía. Creo que esos serían
-	// los momentos donde deberíamos cambiar de estrategia.
-	// O podríamos tener estrategias para buscar enemigos o para huir
-	private Strategy[] strategies = { new StolenStrategy(this) };
+	// Cuando nos pegan y cuando disparamos, perdemos energia. Creo que esos serian
+	// los momentos donde deberiamos cambiar de estrategia.
+	// O podriaamos tener estrategias para buscar enemigos o para huir
+	private ArrayList<Strategy> strategies = new ArrayList<Strategy>();
 	private int currentPositionStrategy = 0;
 
-	public int moveAmount;
+	public LoboRobot() {
+		StolenStrategy stolenStrategy = new StolenStrategy(this);
+		this.strategies.add(stolenStrategy);
+		MiddleStrategy middleStrategy = new MiddleStrategy(this);
+		this.strategies.add(middleStrategy);
+		LowStrategy lowStrategy = new LowStrategy(this);
+		this.strategies.add(lowStrategy);
+		System.out.println(strategies);
+	}
+	
+		
+	public ArrayList<Strategy> getStrategies() {
+		return strategies;
+	}
+
+
+	public void setStrategies(ArrayList<Strategy> strategies) {
+		this.strategies = strategies;
+	}
+
+
+	public int getCurrentPositionStrategy() {
+		return currentPositionStrategy;
+	}
+
+
+	public void setCurrentPositionStrategy(int currentPositionStrategy) {
+		this.currentPositionStrategy = currentPositionStrategy;
+	}
+
 
 	@Override
 	public void run() {
+		setColors(white, blue, white, blue, white);
 		this.getCurrentStrategy().run();
 	}
 
@@ -61,7 +94,7 @@ public class LoboRobot extends JuniorRobot {
 	 *         hacerlo de otra manera
 	 */
 	private Strategy getCurrentStrategy() {
-		return this.strategies[this.currentPositionStrategy];
+		return this.strategies.get(this.getCurrentPositionStrategy());
 	}
 
 }
