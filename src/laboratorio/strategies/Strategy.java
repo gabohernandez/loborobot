@@ -14,4 +14,6 @@ public interface Strategy {
 	public void onHitWall();
 
 	public void onHitRobot();
+
+	public void applyFirstConfigurations();
 }

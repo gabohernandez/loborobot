@@ -7,7 +7,7 @@ import laboratorio.strategies.Strategy;
 import laboratorio.strategies.StrategyEnum;
 import laboratorio.strategies.impl.LowStrategy;
 import laboratorio.strategies.impl.MiddleStrategy;
-import laboratorio.strategies.impl.StolenStrategy;
+import laboratorio.strategies.impl.AggressiveStrategy;
 import robocode.JuniorRobot;
 
 // API help : http://robocode.sourceforge.net/docs/robocode/robocode/JuniorRobot.html
@@ -18,10 +18,10 @@ public class LoboRobot extends JuniorRobot {
 	private StrategyEnum currentStrategy;
 
 	public LoboRobot() {
-		this.strategies.put(StrategyEnum.STOLEN_STRATEGY, new StolenStrategy(this));
+		this.strategies.put(StrategyEnum.AGGRESSIVE_STRATEGY, new AggressiveStrategy(this));
 		this.strategies.put(StrategyEnum.MIDDLE_STRATEGY, new MiddleStrategy(this));
 		this.strategies.put(StrategyEnum.LOW_STRATEGY, new LowStrategy(this));
-		this.currentStrategy = StrategyEnum.STOLEN_STRATEGY;
+		this.currentStrategy = StrategyEnum.AGGRESSIVE_STRATEGY;
 	}
 
 	public Map<StrategyEnum, Strategy> getStrategies() {
@@ -45,7 +45,7 @@ public class LoboRobot extends JuniorRobot {
 		while (true) {
 			// Si tenemos que hacer algo antes de los próximos pasos podemos meter un first
 			// step. Algo así:
-			// this.getStrategy().firstSteap();
+			 this.getStrategy().applyFirstConfigurations();
 			// Cada estrategía debería ejecutar esos pasos una única vez, por ende
 			// tendriamos un booleano en false y cuando se ejecuta por primera vez pasa a
 			// true
