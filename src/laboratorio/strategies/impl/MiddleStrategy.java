@@ -26,8 +26,8 @@ public class MiddleStrategy extends ParentStrategy implements Strategy {
 	@Override
 	public void nextStep() {
 		Random rand = new Random();
-		int random_integer = rand.nextInt(340-1) + 1;
-		robot.turnTo(random_integer);
+		int randomInteger = rand.nextInt(340-1) + 1;
+		robot.turnTo(randomInteger);
 		robot.ahead(250);
 	}
 
@@ -40,6 +40,10 @@ public class MiddleStrategy extends ParentStrategy implements Strategy {
 		this.robot.turnGunTo((int) (robot.scannedAngle + offset));
 		this.robot.fire(firepower);
 		this.robot.turnGunTo(this.robot.hitByBulletAngle);
+		changeStrategyToLow();
+	}
+
+	private void changeStrategyToLow() {
 		if (this.robot.energy < 40) {
 			this.robot.setCurrentStrategy(StrategyEnum.LOW_STRATEGY);
 		}
@@ -48,18 +52,14 @@ public class MiddleStrategy extends ParentStrategy implements Strategy {
 	@Override
 	public void onHitByBullet() {
 		this.robot.turnGunTo(this.robot.hitByBulletAngle);
-		if (this.robot.energy < 40) {
-			this.robot.setCurrentStrategy(StrategyEnum.LOW_STRATEGY);
-		}
+		changeStrategyToLow();
 	}
 
 	@Override
 	public void onHitWall() {
 		this.robot.bearGunTo(90);
 		this.robot.turnRight(90);
-		if (this.robot.energy < 40) {
-			this.robot.setCurrentStrategy(StrategyEnum.LOW_STRATEGY);
-		}
+		changeStrategyToLow();
 	}
 
 	@Override
@@ -67,9 +67,7 @@ public class MiddleStrategy extends ParentStrategy implements Strategy {
 		this.robot.turnLeft(90);
 		if (this.robot.scannedBearing > -90 && this.robot.scannedBearing < 90)
 			this.robot.back(100);
-		if (this.robot.energy < 40) {
-			this.robot.setCurrentStrategy(StrategyEnum.LOW_STRATEGY);
-		}
+		changeStrategyToLow();
 	}
 
 }

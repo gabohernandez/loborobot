@@ -28,8 +28,8 @@ public class AggressiveStrategy extends ParentStrategy implements Strategy {
 
 	public void nextStep() {
 		Random rand = new Random();
-		int random_integer = rand.nextInt(340-1) + 1;
-		robot.turnTo(random_integer);
+		int randomInteger = rand.nextInt(340-1) + 1;
+		robot.turnTo(randomInteger);
 		robot.ahead(moveAmount);
 	}
 
@@ -42,6 +42,10 @@ public class AggressiveStrategy extends ParentStrategy implements Strategy {
 		this.robot.turnGunTo((int) (robot.scannedAngle + offset));
 		this.robot.fire(firepower);
 		this.robot.turnGunTo(this.robot.hitByBulletAngle);
+		changeStrategyToMiddle();
+	}
+
+	private void changeStrategyToMiddle() {
 		if (this.robot.energy < 70) {
 			this.robot.setCurrentStrategy(StrategyEnum.MIDDLE_STRATEGY);
 		}
@@ -50,9 +54,7 @@ public class AggressiveStrategy extends ParentStrategy implements Strategy {
 	@Override
 	public void onHitByBullet() {
 		this.robot.turnGunTo(this.robot.hitByBulletAngle);
-		if (this.robot.energy < 70) {
-			this.robot.setCurrentStrategy(StrategyEnum.MIDDLE_STRATEGY);
-		}
+		changeStrategyToMiddle();
 	}
 
 	@Override
@@ -60,9 +62,7 @@ public class AggressiveStrategy extends ParentStrategy implements Strategy {
 		// Si le pega a la pared gira el cuerpo y el arma 90 grados
 		this.robot.bearGunTo(90);
 		this.robot.turnRight(90);
-		if (this.robot.energy < 70) {
-			this.robot.setCurrentStrategy(StrategyEnum.MIDDLE_STRATEGY);
-		}
+		changeStrategyToMiddle();
 	}
 
 	@Override
@@ -72,9 +72,7 @@ public class AggressiveStrategy extends ParentStrategy implements Strategy {
 			this.robot.back(100);
 		else
 			this.robot.ahead(100);
-		if (this.robot.energy < 70) {
-			this.robot.setCurrentStrategy(StrategyEnum.MIDDLE_STRATEGY);
-		}
+		changeStrategyToMiddle();
 	}
 
 }
