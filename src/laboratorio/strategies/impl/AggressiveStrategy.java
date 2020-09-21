@@ -1,5 +1,7 @@
 package laboratorio.strategies.impl;
 
+import java.util.Random;
+
 import laboratorio.LoboRobot;
 import laboratorio.strategies.Strategy;
 import laboratorio.strategies.StrategyEnum;
@@ -25,15 +27,24 @@ public class AggressiveStrategy extends ParentStrategy implements Strategy {
 	}
 
 	public void nextStep() {
+		Random rand = new Random();
+		int random_integer = rand.nextInt(340-1) + 1;
+		robot.turnTo(random_integer);
 		robot.ahead(moveAmount);
 	}
 
 	@Override
 	public void onScannedRobot() {
 		double firepower = 3d - 2d * ((double) robot.scannedDistance / (double) this.moveAmount);
+		double bulletVelocity = 20 - 3 * firepower;
+		double offset = Math.toDegrees(Math.asin(this.robot.scannedVelocity
+		        * Math.sin(Math.toRadians(this.robot.scannedHeading - this.robot.scannedAngle)) / bulletVelocity));
+		this.robot.turnGunTo((int) (robot.scannedAngle + offset));
 		this.robot.fire(firepower);
-		this.robot.bearGunTo(robot.scannedHeading);
-		this.robot.ahead(moveAmount);
+		this.robot.turnGunTo(this.robot.hitByBulletAngle);
+		if (this.robot.energy < 70) {
+			this.robot.setCurrentStrategy(StrategyEnum.MIDDLE_STRATEGY);
+		}
 	}
 
 	@Override

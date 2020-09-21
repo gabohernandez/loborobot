@@ -14,13 +14,16 @@ public class LowStrategy extends ParentStrategy implements Strategy {
 		if (!firstConfigurationsApplied) {
 			firstConfigurationsApplied = true;
 			super.applyFirstConfigurations();
+			robot.turnTo(90);
 		}
 	}
 
 	@Override
 	public void nextStep() {
-		robot.bearGunTo(90);
-		robot.ahead(moveAmount);
+		int angle = robot.heading + 90;
+		robot.turnTo(angle);
+		robot.turnGunTo(angle);
+		robot.ahead(150);
 	}
 
 	@Override

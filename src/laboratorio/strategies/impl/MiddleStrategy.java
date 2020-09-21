@@ -1,5 +1,7 @@
 package laboratorio.strategies.impl;
 
+import java.util.Random;
+
 import laboratorio.LoboRobot;
 import laboratorio.strategies.Strategy;
 import laboratorio.strategies.StrategyEnum;
@@ -17,27 +19,30 @@ public class MiddleStrategy extends ParentStrategy implements Strategy {
 		if (!firstConfigurationsApplied) {
 			firstConfigurationsApplied = true;
 			super.applyFirstConfigurations();
+			robot.turnTo(45);
 		}
 	}
 
 	@Override
 	public void nextStep() {
-		robot.turnRight((int) normalRelativeAngleDegrees((Math.random() * 4) - robot.heading));
-		robot.ahead(moveAmount);
-	}
-
-	public static double normalRelativeAngleDegrees(double angle) {
-		return (angle %= 360) >= 0 ? (angle < 180) ? angle : angle - 360 : (angle >= -180) ? angle : angle + 360;
+		Random rand = new Random();
+		int random_integer = rand.nextInt(340-1) + 1;
+		robot.turnTo(random_integer);
+		robot.ahead(250);
 	}
 
 	@Override
 	public void onScannedRobot() {
-		double firepower = 3d - 2d * ((double) robot.scannedDistance / (double) this.moveAmount);
+		double firepower = 2d * ((double) robot.scannedDistance / (double) this.moveAmount);
 		double bulletVelocity = 20 - 3 * firepower;
 		double offset = Math.toDegrees(Math.asin(this.robot.scannedVelocity
 		        * Math.sin(Math.toRadians(this.robot.scannedHeading - this.robot.scannedAngle)) / bulletVelocity));
 		this.robot.turnGunTo((int) (robot.scannedAngle + offset));
 		this.robot.fire(firepower);
+		this.robot.turnGunTo(this.robot.hitByBulletAngle);
+		if (this.robot.energy < 40) {
+			this.robot.setCurrentStrategy(StrategyEnum.LOW_STRATEGY);
+		}
 	}
 
 	@Override
