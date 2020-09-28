@@ -38,7 +38,7 @@ public class MiddleStrategy extends ParentStrategy implements Strategy {
 		        * Math.sin(Math.toRadians(robot.scannedHeading - robot.scannedAngle)) / bulletVelocity));
 		robot.turnGunTo((int) (robot.scannedAngle + offset));
 		robot.fire(firepower);
-		robot.turnGunTo(robot.hitByBulletAngle);
+		
 	}
 
 	@Override

@@ -9,12 +9,14 @@ import laboratorio.strategies.impl.LowStrategy;
 import laboratorio.strategies.impl.MiddleStrategy;
 import laboratorio.strategies.impl.AggressiveStrategy;
 import robocode.JuniorRobot;
+import robocode.ScannedRobotEvent;
 import strategist.Strategist;
 
 // API help : http://robocode.sourceforge.net/docs/robocode/robocode/JuniorRobot.html
 
 public class LoboRobot extends JuniorRobot {
 
+	
 	public LoboRobot() {
 		
 	}
@@ -36,8 +38,7 @@ public class LoboRobot extends JuniorRobot {
 	/**
 	 * onScannedRobot: What to do when you see another robot
 	 */
-	@Override
-	public void onScannedRobot() {
+	public void onScannedRobot(ScannedRobotEvent e) {
 		Strategist.getstrategist().getStrategy(this).onScannedRobot(this);
 	}
 

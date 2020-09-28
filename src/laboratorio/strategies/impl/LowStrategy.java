@@ -28,6 +28,11 @@ public class LowStrategy extends ParentStrategy implements Strategy {
 
 	@Override
 	public void onScannedRobot(LoboRobot robot) {
+		double firepower = 2d * ((double) robot.scannedDistance / (double) this.moveAmount);
+		double bulletVelocity = 20 - 3 * firepower;
+		double offset = Math.toDegrees(Math.asin(robot.scannedVelocity
+		        * Math.sin(Math.toRadians(robot.scannedHeading - robot.scannedAngle)) / bulletVelocity));
+		robot.turnGunTo((int) (robot.scannedAngle + offset));
 		robot.fire(1);
 	}
 

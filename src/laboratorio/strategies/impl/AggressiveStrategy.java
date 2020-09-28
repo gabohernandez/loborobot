@@ -11,7 +11,7 @@ import laboratorio.strategies.Strategy;
  */
 
 public class AggressiveStrategy extends ParentStrategy implements Strategy {
-
+	
 	public AggressiveStrategy() {
 		super();
 	}
@@ -21,38 +21,36 @@ public class AggressiveStrategy extends ParentStrategy implements Strategy {
 			firstConfigurationsApplied = true;
 			super.applyFirstConfigurations(robot);
 			// Gira el robot para mirar arriba
-			robot.turnTo(0);
+			moveAmount = Math.max(robot.fieldWidth, robot.fieldHeight);
 		}
 	}
 
 	public void nextStep(LoboRobot robot) {
-		Random rand = new Random();
-		int randomInteger = rand.nextInt(340-1) + 1;
-		robot.turnTo(randomInteger);
 		robot.ahead(moveAmount);
 	}
 
 	@Override
 	public void onScannedRobot(LoboRobot robot) {
-		double firepower = 3d - 2d * ((double) robot.scannedDistance / (double) this.moveAmount);
+		double firepower = (double) robot.scannedDistance ;
 		double bulletVelocity = 20 - 3 * firepower;
 		double offset = Math.toDegrees(Math.asin(robot.scannedVelocity
 		        * Math.sin(Math.toRadians(robot.scannedHeading - robot.scannedAngle)) / bulletVelocity));
 		robot.turnGunTo((int) (robot.scannedAngle + offset));
 		robot.fire(firepower);
-		robot.turnGunTo(robot.hitByBulletAngle);
 	}
 
 	@Override
 	public void onHitByBullet(LoboRobot robot) {
-		robot.turnGunTo(robot.hitByBulletAngle);
+		int bearing = robot.hitByBulletBearing; 
+	    robot.turnRight(-bearing); 
+	    robot.ahead(360);
 	}
 
 	@Override
 	public void onHitWall(LoboRobot robot) {
-		// Si le pega a la pared gira el cuerpo y el arma 90 grados
-		robot.bearGunTo(90);
-		robot.turnRight(90);
+		int bearing = robot.hitWallBearing; 
+	    robot.turnRight(-bearing);
+	    robot.ahead(100);
 	}
 
 	@Override
