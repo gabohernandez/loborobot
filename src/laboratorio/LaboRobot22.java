@@ -1,23 +1,14 @@
 package laboratorio;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import laboratorio.strategies.Strategy;
-import laboratorio.strategies.StrategyEnum;
-import laboratorio.strategies.impl.LowStrategy;
-import laboratorio.strategies.impl.MiddleStrategy;
-import laboratorio.strategies.impl.AggressiveStrategy;
 import robocode.JuniorRobot;
-import robocode.ScannedRobotEvent;
 import strategist.Strategist;
 
 // API help : http://robocode.sourceforge.net/docs/robocode/robocode/JuniorRobot.html
 
-public class LoboRobot extends JuniorRobot {
+public class LaboRobot22 extends JuniorRobot {
 
 	
-	public LoboRobot() {
+	public LaboRobot22() {
 		
 	}
 
@@ -38,13 +29,15 @@ public class LoboRobot extends JuniorRobot {
 	/**
 	 * onScannedRobot: What to do when you see another robot
 	 */
-	public void onScannedRobot(ScannedRobotEvent e) {
+	@Override
+	public void onScannedRobot() {
 		Strategist.getstrategist().getStrategy(this).onScannedRobot(this);
 	}
 
 	/**
 	 * onHitWall: What to do when you hit a wall
 	 */
+	@Override
 	public void onHitWall() {
 		Strategist.getstrategist().getStrategy(this).onHitWall(this);
 	}
@@ -52,6 +45,7 @@ public class LoboRobot extends JuniorRobot {
 	/**
 	 * onHitByBullet: What to do when you're hit by a bullet
 	 */
+	@Override
 	public void onHitByBullet() {
 		Strategist.getstrategist().getStrategy(this).onHitByBullet(this);
 	}
@@ -59,6 +53,7 @@ public class LoboRobot extends JuniorRobot {
 	/**
 	 * onHitRobot: What to do when you're hit by a robot
 	 */
+	@Override
 	public void onHitRobot() {
 		Strategist.getstrategist().getStrategy(this).onHitRobot(this);
 	}

@@ -2,7 +2,7 @@ package laboratorio.strategies.impl;
 
 import java.util.Random;
 
-import laboratorio.LoboRobot;
+import laboratorio.LaboRobot22;
 import laboratorio.strategies.Strategy;
 
 public class MiddleStrategy extends ParentStrategy implements Strategy {
@@ -14,7 +14,7 @@ public class MiddleStrategy extends ParentStrategy implements Strategy {
 	}
 
 	@Override
-	public void applyFirstConfigurations(LoboRobot robot) {
+	public void applyFirstConfigurations(LaboRobot22 robot) {
 		if (!firstConfigurationsApplied) {
 			firstConfigurationsApplied = true;
 			super.applyFirstConfigurations(robot);
@@ -23,7 +23,7 @@ public class MiddleStrategy extends ParentStrategy implements Strategy {
 	}
 
 	@Override
-	public void nextStep(LoboRobot robot) {
+	public void nextStep(LaboRobot22 robot) {
 		Random rand = new Random();
 		int randomInteger = rand.nextInt(340-1) + 1;
 		robot.turnTo(randomInteger);
@@ -31,7 +31,7 @@ public class MiddleStrategy extends ParentStrategy implements Strategy {
 	}
 
 	@Override
-	public void onScannedRobot(LoboRobot robot) {
+	public void onScannedRobot(LaboRobot22 robot) {
 		double firepower = 2d * ((double) robot.scannedDistance / (double) this.moveAmount);
 		double bulletVelocity = 20 - 3 * firepower;
 		double offset = Math.toDegrees(Math.asin(robot.scannedVelocity
@@ -42,18 +42,18 @@ public class MiddleStrategy extends ParentStrategy implements Strategy {
 	}
 
 	@Override
-	public void onHitByBullet(LoboRobot robot) {
+	public void onHitByBullet(LaboRobot22 robot) {
 		robot.turnGunTo(robot.hitByBulletAngle);
 	}
 
 	@Override
-	public void onHitWall(LoboRobot robot) {
+	public void onHitWall(LaboRobot22 robot) {
 		robot.bearGunTo(90);
 		robot.turnRight(90);
 	}
 
 	@Override
-	public void onHitRobot(LoboRobot robot) {
+	public void onHitRobot(LaboRobot22 robot) {
 		robot.turnLeft(90);
 		if (robot.scannedBearing > -90 && robot.scannedBearing < 90)
 			robot.back(100);
