@@ -5,21 +5,21 @@ import laboratorio.strategies.Strategy;
 
 public class LowStrategy extends ParentStrategy implements Strategy {
 
-	public LowStrategy(LoboRobot robot) {
-		super(robot);
+	public LowStrategy() {
+		super();
 	}
 
 	@Override
-	public void applyFirstConfigurations() {
+	public void applyFirstConfigurations(LoboRobot robot) {
 		if (!firstConfigurationsApplied) {
 			firstConfigurationsApplied = true;
-			super.applyFirstConfigurations();
+			super.applyFirstConfigurations(robot);
 			robot.turnTo(90);
 		}
 	}
 
 	@Override
-	public void nextStep() {
+	public void nextStep(LoboRobot robot) {
 		int angle = robot.heading + 90;
 		robot.turnTo(angle);
 		robot.turnGunTo(angle);
@@ -27,26 +27,26 @@ public class LowStrategy extends ParentStrategy implements Strategy {
 	}
 
 	@Override
-	public void onScannedRobot() {
-		this.robot.fire(1);
+	public void onScannedRobot(LoboRobot robot) {
+		robot.fire(1);
 	}
 
 	@Override
-	public void onHitByBullet() {
-		this.robot.turnGunTo(this.robot.hitByBulletAngle);
-		this.robot.turnTo(5);
-		this.robot.ahead(moveAmount);
+	public void onHitByBullet(LoboRobot robot) {
+		robot.turnGunTo(robot.hitByBulletAngle);
+		robot.turnTo(5);
+		robot.ahead(moveAmount);
 	}
 
 	@Override
-	public void onHitWall() {
-		this.robot.bearGunTo(90);
-		this.robot.turnRight(90);
+	public void onHitWall(LoboRobot robot) {
+		robot.bearGunTo(90);
+		robot.turnRight(90);
 	}
 
 	@Override
-	public void onHitRobot() {
-		this.robot.turnTo(5);
+	public void onHitRobot(LoboRobot robot) {
+		robot.turnTo(5);
 	}
 
 }

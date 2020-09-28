@@ -9,47 +9,27 @@ import laboratorio.strategies.impl.LowStrategy;
 import laboratorio.strategies.impl.MiddleStrategy;
 import laboratorio.strategies.impl.AggressiveStrategy;
 import robocode.JuniorRobot;
+import strategist.Strategist;
 
 // API help : http://robocode.sourceforge.net/docs/robocode/robocode/JuniorRobot.html
 
 public class LoboRobot extends JuniorRobot {
 
-	private Map<StrategyEnum, Strategy> strategies = new HashMap();
-	private StrategyEnum currentStrategy;
-
 	public LoboRobot() {
-		this.strategies.put(StrategyEnum.AGGRESSIVE_STRATEGY, new AggressiveStrategy(this));
-		this.strategies.put(StrategyEnum.MIDDLE_STRATEGY, new MiddleStrategy(this));
-		this.strategies.put(StrategyEnum.LOW_STRATEGY, new LowStrategy(this));
-		this.currentStrategy = StrategyEnum.AGGRESSIVE_STRATEGY;
+		
 	}
 
-	public Map<StrategyEnum, Strategy> getStrategies() {
-		return strategies;
-	}
-
-	public StrategyEnum getCurrentStrategy() {
-		return currentStrategy;
-	}
-
-	public void setCurrentStrategy(StrategyEnum currentStrategy) {
-		this.currentStrategy = currentStrategy;
-	}
-
-	/**
-	 * 
-	 */
 	@Override
 	public void run() {
 		setColors(white, blue, white, blue, white);
 		while (true) {
 			// Si tenemos que hacer algo antes de los próximos pasos podemos meter un first
 			// step. Algo así:
-			 this.getStrategy().applyFirstConfigurations();
+			Strategist.getstrategist().getStrategy(this).applyFirstConfigurations(this);
 			// Cada estrategía debería ejecutar esos pasos una única vez, por ende
 			// tendriamos un booleano en false y cuando se ejecuta por primera vez pasa a
 			// true
-			this.getStrategy().nextStep();
+			Strategist.getstrategist().getStrategy(this).nextStep(this);
 		}
 	}
 
@@ -58,36 +38,28 @@ public class LoboRobot extends JuniorRobot {
 	 */
 	@Override
 	public void onScannedRobot() {
-		this.getStrategy().onScannedRobot();
+		Strategist.getstrategist().getStrategy(this).onScannedRobot(this);
 	}
 
 	/**
 	 * onHitWall: What to do when you hit a wall
 	 */
 	public void onHitWall() {
-		this.getStrategy().onHitWall();
+		Strategist.getstrategist().getStrategy(this).onHitWall(this);
 	}
 
 	/**
 	 * onHitByBullet: What to do when you're hit by a bullet
 	 */
 	public void onHitByBullet() {
-		this.getStrategy().onHitByBullet();
+		Strategist.getstrategist().getStrategy(this).onHitByBullet(this);
 	}
 
 	/**
 	 * onHitRobot: What to do when you're hit by a robot
 	 */
 	public void onHitRobot() {
-		this.getStrategy().onHitRobot();
-	}
-
-	/**
-	 * 
-	 * @return la estrategia actual
-	 */
-	private Strategy getStrategy() {
-		return this.strategies.get(this.getCurrentStrategy());
+		Strategist.getstrategist().getStrategy(this).onHitRobot(this);
 	}
 
 }

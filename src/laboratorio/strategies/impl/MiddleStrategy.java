@@ -4,27 +4,26 @@ import java.util.Random;
 
 import laboratorio.LoboRobot;
 import laboratorio.strategies.Strategy;
-import laboratorio.strategies.StrategyEnum;
 
 public class MiddleStrategy extends ParentStrategy implements Strategy {
 
 	static int corner = 0;
 
-	public MiddleStrategy(LoboRobot robot) {
-		super(robot);
+	public MiddleStrategy() {
+		super();
 	}
 
 	@Override
-	public void applyFirstConfigurations() {
+	public void applyFirstConfigurations(LoboRobot robot) {
 		if (!firstConfigurationsApplied) {
 			firstConfigurationsApplied = true;
-			super.applyFirstConfigurations();
+			super.applyFirstConfigurations(robot);
 			robot.turnTo(45);
 		}
 	}
 
 	@Override
-	public void nextStep() {
+	public void nextStep(LoboRobot robot) {
 		Random rand = new Random();
 		int randomInteger = rand.nextInt(340-1) + 1;
 		robot.turnTo(randomInteger);
@@ -32,42 +31,32 @@ public class MiddleStrategy extends ParentStrategy implements Strategy {
 	}
 
 	@Override
-	public void onScannedRobot() {
+	public void onScannedRobot(LoboRobot robot) {
 		double firepower = 2d * ((double) robot.scannedDistance / (double) this.moveAmount);
 		double bulletVelocity = 20 - 3 * firepower;
-		double offset = Math.toDegrees(Math.asin(this.robot.scannedVelocity
-		        * Math.sin(Math.toRadians(this.robot.scannedHeading - this.robot.scannedAngle)) / bulletVelocity));
-		this.robot.turnGunTo((int) (robot.scannedAngle + offset));
-		this.robot.fire(firepower);
-		this.robot.turnGunTo(this.robot.hitByBulletAngle);
-		changeStrategyToLow();
-	}
-
-	private void changeStrategyToLow() {
-		if (this.robot.energy < 40) {
-			this.robot.setCurrentStrategy(StrategyEnum.LOW_STRATEGY);
-		}
+		double offset = Math.toDegrees(Math.asin(robot.scannedVelocity
+		        * Math.sin(Math.toRadians(robot.scannedHeading - robot.scannedAngle)) / bulletVelocity));
+		robot.turnGunTo((int) (robot.scannedAngle + offset));
+		robot.fire(firepower);
+		robot.turnGunTo(robot.hitByBulletAngle);
 	}
 
 	@Override
-	public void onHitByBullet() {
-		this.robot.turnGunTo(this.robot.hitByBulletAngle);
-		changeStrategyToLow();
+	public void onHitByBullet(LoboRobot robot) {
+		robot.turnGunTo(robot.hitByBulletAngle);
 	}
 
 	@Override
-	public void onHitWall() {
-		this.robot.bearGunTo(90);
-		this.robot.turnRight(90);
-		changeStrategyToLow();
+	public void onHitWall(LoboRobot robot) {
+		robot.bearGunTo(90);
+		robot.turnRight(90);
 	}
 
 	@Override
-	public void onHitRobot() {
-		this.robot.turnLeft(90);
-		if (this.robot.scannedBearing > -90 && this.robot.scannedBearing < 90)
-			this.robot.back(100);
-		changeStrategyToLow();
+	public void onHitRobot(LoboRobot robot) {
+		robot.turnLeft(90);
+		if (robot.scannedBearing > -90 && robot.scannedBearing < 90)
+			robot.back(100);
 	}
 
 }
