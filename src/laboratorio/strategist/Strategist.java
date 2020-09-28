@@ -1,4 +1,4 @@
-package strategist;
+package laboratorio.strategist;
 
 import java.util.HashMap;
 import java.util.Map;

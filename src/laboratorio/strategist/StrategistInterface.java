@@ -1,4 +1,4 @@
-package strategist;
+package laboratorio.strategist;
 
 import laboratorio.LaboRobot22;
 import laboratorio.strategies.Strategy;

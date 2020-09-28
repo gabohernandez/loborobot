@@ -1,7 +1,7 @@
 package laboratorio;
 
+import laboratorio.strategist.Strategist;
 import robocode.JuniorRobot;
-import strategist.Strategist;
 
 // API help : http://robocode.sourceforge.net/docs/robocode/robocode/JuniorRobot.html
 
